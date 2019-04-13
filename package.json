@@ -1,0 +1,22 @@
+{
+  "name": "p2pool-scanner",
+  "author": {
+    "name": "AXE Project",
+    "email": "info@axerunners.com"
+  },
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "3.*",
+    "json" : "*",
+    "underscore" : "*"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axerunners/p2pool-scanner.git"
+  },
+  "readmeFilename": "README.md"
+
+}
