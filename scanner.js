@@ -405,4 +405,4 @@ function Scanner(options) {
 }
 
 
-GLOBAL.scanner = new Scanner();
+global.scanner = new Scanner();
