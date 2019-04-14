@@ -105,7 +105,7 @@ function Scanner(options) {
             str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+7923+"/static/' target='_blank'>"+ip+":"+7923+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
             str += "<div class='p2p-geo'>";
             if(info.geo) {
-                str += "<a href='http://www.geoiptool.com/en/?IP="+info.ip+"' target='_blank'>"+info.geo.country+" "+"<img src='"+info.geo.img+"' align='absmiddle' border='0'/></a>";
+                str += "<a href='http://www.geoiptool.de/en/?IP="+info.ip+"' target='_blank'>"+info.geo.country+" "+"<img src='"+info.geo.img+"' align='absmiddle' border='0'/></a>";
             }
             str += "</div>";
             str += "</div>";
