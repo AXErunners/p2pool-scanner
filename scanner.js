@@ -1,3 +1,4 @@
+
 var fs = require('fs'),
     http = require('http'),
     exec = require('child_process').exec,
@@ -26,28 +27,13 @@ function Scanner(options) {
     {
         var express = require('express');
         var app = express();
-        app.configure(function(){
-            app.use(express.bodyParser());
-        });
+        app.use(express.urlencoded())
+        app.use(express.json());
         app.get('/', function(req, res) {
             var str = self.render();
             res.write(str);
             res.end();
         });
-	app.get('/api', function(req, res) {
-	    var str = self.json();
-            res.write(str);
-            res.end();
-	});
-	app.get('/urls', function(req, res) {
-	    var urls = [];
-            for(var url in self.addr_working) {
-                urls.push(url);
-	    }
-
-	    res.write(JSON.stringify(urls));
-            res.end();
-	});
 
         http.createServer(app).listen(config.http_port, function() {
             console.log("HTTP server listening on port: ",config.http_port);
@@ -58,9 +44,6 @@ function Scanner(options) {
     if(logo)
         logo = "data:image/png;base64,"+logo;
 
-    self.json = function() {
-        return JSON.stringify(self.addr_working);
-    };
 
     self.render = function() {
         var str = "<html><head>"
@@ -70,26 +53,27 @@ function Scanner(options) {
             +"a:visited { text-decoration: none; color: #0051AD; }"
             +"a:hover { text-decoration: none; color: #F04800; }"
             +".row-grey { background-color: #f3f3f3;  }"
-            +".p2p {  width: 838px; margin: auto; border: 1px solid #aaa;  box-shadow: 2px 2px 2px #aaa; padding: 2px;  }"
-            +".p2p-row { width: 820px; padding: 10px; height: 16px; }"
-            +".p2p-caption { width: 820px; text-align: center;  background-color: #ddd; padding-top: 4px; padding-bottom: 8px;}"
+            +".p2p {  width: 1140px; margin: auto; border: 1px solid #aaa;  box-shadow: 2px 2px 2px #aaa; padding: 2px;  }"
+            +".p2p-row { width: 1120px; padding: 10px; height: 16px; }"
+            +".p2p-caption { width: 1120px; text-align: center;  background-color: #ddd; padding-top: 4px; padding-bottom: 8px;}"
             +".p2p div { float : left; }"
             +".p2p-ip { width: 200px; text-align:left; }"
-            +".p2p-version { margin-left: 10px; width: 100px; text-align: center;}"
-            +".p2p-fee { margin-left: 10px; width: 90px; text-align: center;}"
-            +".p2p-uptime { margin-left: 10px; width: 100px; text-align: center;}"
-            +".p2p-geo { margin-left: 40px; width: 248px; text-align: left;}"
+            +".p2p-version { margin-left: 10px; width: 200px; tex-align: center;}"
+            +".p2p-fee { margin-left: 40px; width: 90px; text-align: center;}"
+            +".p2p-local-hashrate { margin-left: 40px; width: 100px; text-align: center;}"
+            +".p2p-uptime { margin-left: 40px; width: 100px; text-align: center;}"
+            +".p2p-geo { margin-left: 40px; width: 250px; text-align: left;}"
             +"img { border: none;}"
             +"</style>"
             +"</head><body>";
         if(logo)
             str += "<div style='text-align:center;'><img src=\""+logo+"\" /></div><br style='clear:both;'/>";
-        str += "<center><a href='https://github.com/axerunners/p2pool-axe' target='_blank'>PEER TO PEER "+(config.currency.toUpperCase())+" MINING NETWORK</a> - PUBLIC NODE LIST<br/><span style='font-size:10px;color:#333;'>GENERATED ON: "+(new Date())+"</span></center><p/>"
+        str += "<center><a href='https://github.com/Rav3nPL/p2pool-rav' target='_blank'>PEER TO PEER "+(config.currency.toUpperCase())+" MINING NETWORK</a> - PUBLIC NODE LIST<br/><span style='font-size:10px;color:#333;'>GENERATED ON: "+(new Date())+"</span></center><p/>"
         if(self.poolstats)
-            str += "<center>Pool speed: "+(self.poolstats.pool_hash_rate/1000000).toFixed(2)+" "+config.speed_abbrev+"</center>";
-        str += "<center>Currently observing "+(self.nodes_total || "N/A")+" nodes.<br/>"+_.size(self.addr_working)+" nodes are public with following IPs:</center><p/>";
+            str += "<center>Global Pool Hashrate: "+(self.poolstats.pool_hash_rate/config.raw_hash_rate).toFixed(2)+" "+config.speed_abbrev+"</center>";
+        str += "<center>There are currently "+(self.nodes_total || "N/A")+" nodes online.<br/>"+_.size(self.addr_working)+" nodes are public with following IPs:</center><p/>";
         str += "<div class='p2p'>";
-        str += "<div class='p2p-row p2p-caption'><div class='p2p-ip'>IPs</div><div class='p2p-version'>Version</div><div class='p2p-fee'>Fee</div><div class='p2p-uptime'>Uptime</div><div class='p2p-geo'>Location</div>";
+        str += "<div class='p2p-row p2p-caption'><div class='p2p-ip'>IPs</div><div class='p2p-version'>Version</div><div class='p2p-fee'>Fee</div><div class='p2p-local-hashrate'>Local Hashrate</div><div class='p2p-uptime'>Uptime</div><div class='p2p-geo'>Location</div>";
         str += "</div><br style='clear:both;'/>";
 
         var list = _.sortBy(_.toArray(self.addr_working), function(o) { return o.stats ? -o.stats.uptime : 0; })
@@ -97,21 +81,25 @@ function Scanner(options) {
         var row = 0;
         _.each(list, function(info) {
             var ip = info.ip;
-
+            var uptime = info.stats ? (info.stats.uptime / 60 / 60 / 24).toFixed(1) : "N/A";
+            var fee = (info.fee || 0).toFixed(2);
             var version = info.stats.version;
-            var uptime = (info.stats.uptime / 60 / 60 / 24).toFixed(1);
-            var fee = parseFloat((info.fee | 0)).toFixed(2);
-
-            str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+7923+"/static/' target='_blank'>"+ip+":"+7923+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
+	    var raw_local_hashrate = 0
+	    for (x in info.stats ['miner_hash_rates']) {
+	        raw_local_hashrate += info.stats ['miner_hash_rates'][x];
+	    }
+            var local_hashrate = (raw_local_hashrate / 1000000).toFixed(2);
+            str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+":"+config.p2pool_port+"/static/' target='_blank'>"+ip+":"+config.p2pool_port+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-local-hashrate'>"+local_hashrate+" Mh/s</div><div class='p2p-uptime'>"+uptime+" days</div>";
             str += "<div class='p2p-geo'>";
             if(info.geo) {
-                str += "<a href='http://www.geoiptool.com/en/?IP="+info.ip+"' target='_blank'>"+info.geo.country+" "+"<img src='"+info.geo.img+"' align='absmiddle' border='0'/></a>";
+                str += "<a href='http://www.geoiptool.com/en/?IP="+info.ip+"' target='_blank'><img src='"+info.geo.img+"' align='absmiddle' border='0'/> "+""+info.geo.country+"</a>";
             }
             str += "</div>";
             str += "</div>";
             str += "<br style='clear:both;'/>";
         })
-        str += "</div><p/><br/>";
+        str += "</div><p/>";
+        str += "<center>A project by <a href='https://github.com/axerunners/p2pool-scanner' target='_blank'>AXErunners</a></center>";
         str += "</body>"
         return str;
     }
@@ -189,7 +177,7 @@ function Scanner(options) {
     self.restore_working = function() {
         try {
             self.addr_working = JSON.parse(fs.readFileSync(config.store_file, 'utf8'));
-        } catch(ex) { console.log(ex); }
+        } catch(ex) { /*console.log(ex);*/ }
     }
 
     // inject new IPs from p2pool addr file
@@ -213,52 +201,25 @@ function Scanner(options) {
 
     // execute scan of a single IP
     self.digest = function() {
+
         if(!_.size(self.addr_pending))
             return self.list_complete();
 
         var info = _.find(self.addr_pending, function() { return true; });
         delete self.addr_pending[info.ip];
-
-	if(info.ip == "0.0.0.0" || info.ip == "127.0.0.1") {
-	    return;
-	}
-
         self.addr_digested[info.ip] = info;
-        console.log("P2POOL DIGESTING:" + info.ip + ":" + 7923);
-
-	var allowedVersions = ["fdc4e2d-dirty",
-			       "20e6354-dirty",
-			       "8542674-dirty",
-			       "c174c98-dirty",
-			       "fcfb6ad-dirty",
-			       "3877fc7-dirty",
-			       "fdc4e2d",
-                               "20e6354",
-                               "8542674",
-                               "c174c98",
-                               "fcfb6ad",
-                               "9fc7f3a",
-                               "9fc7f3a-dirty",
-                               "e0909bc-dirty",
-                               "e0909bc",
-                               "4cacc36",
-                               "4cacc36-dirty",
-                               "e1a9b6a",
-                               "e1a9b6a-dirty",
-			       "649807a",
-			       "649807a-dirty",
-                               "d7ddaa4",
-                               "d7ddaa4-dirty"];
+        // console.log("P2POOL DIGESTING:",info.ip);
 
         digest_ip(info, function(err, fee){
             if(!err) {
+                info.fee = fee;
+                self.addr_working[info.ip] = info;
+                // console.log("FOUND WORKING POOL: ", info.ip);
+
                 digest_local_stats(info, function(err, stats) {
-		    if(!err && allowedVersions.indexOf(stats.version) >= 0) {
-                    	info.fee = fee;
-		        info.stats = stats;
-	                console.log("FOUND WORKING POOL: " + info.ip + ":7923 " + info.stats.version);
-                	self.addr_working[info.ip] = info;
-		digest_global_stats(info, function(err, stats) {
+                    if(!err)
+                        info.stats = stats;
+                    digest_global_stats(info, function(err, stats) {
                         if(!err)
                             self.update_global_stats(stats);
 
@@ -272,14 +233,10 @@ function Scanner(options) {
                         else
                             continue_digest();
                     });
-		}
                 });
             }
             else {
                 delete self.addr_working[info.ip];
-		/*if(!err && allowedVersions.indexOf(info.stats.version) < 0) {
-		   console.log("Node was wrong version: " + info.stats.version);
-		}*/
                 continue_digest();
             }
 
@@ -303,7 +260,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 7923,
+          port: config.p2pool_port,
           path: '/fee',
           method: 'GET'
         };
@@ -315,7 +272,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 7923,
+          port: config.p2pool_port,
           path: '/local_stats',
           method: 'GET'
         };
@@ -327,7 +284,7 @@ function Scanner(options) {
 
         var options = {
           host: info.ip,
-          port: 7923,
+          port: config.p2pool_port,
           path: '/global_stats',
           method: 'GET'
         };
@@ -347,12 +304,12 @@ function Scanner(options) {
             });
 
             res.on('end', function () {
-		if(options.plain)
+                if(options.plain)
                     callback(null, result);
                 else {
                     try {
                         var o = JSON.parse(result);
-			callback(null, o);
+                        callback(null, o);
                     } catch(ex) {
                         console.error(ex);
                         callback(ex);
@@ -406,3 +363,6 @@ function Scanner(options) {
 
 
 global.scanner = new Scanner();
+
+
+//
