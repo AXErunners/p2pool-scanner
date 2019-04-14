@@ -4,11 +4,11 @@
     "name": "AXE p2pool-scanner",
     "email": "info@axerunners.com"
   },
-  "version": "0.0.3",
+  "version": "0.0.2",
   "dependencies": {
-    "express": "^4.16.2",
-    "json": "^9.0.6",
-    "underscore": "^1.8.3"
+    "express": "3.8.0",
+    "json": "*",
+    "underscore": "*"
   },
   "engines": {
     "node": "*"
