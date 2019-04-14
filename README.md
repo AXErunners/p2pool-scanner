@@ -1,5 +1,6 @@
-Peer to Peer mining network public node scanner
-===============================================
+p2pool-scanner
+==============
+[![NPM version](https://img.shields.io/npm/v/@axerunners/p2pool-scanner.svg)](https://npmjs.org/package/@axerunners/p2pool-scanner)
 
 A simple NodeJS scanner that runs beside p2pool node and scans all IPs stored in addrs file. If IP has a public interface, then it is added to the list.  Users can connect to these nodes to mine on p2pool network without having to setup their own p2pool node.
 
