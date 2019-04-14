@@ -2,9 +2,9 @@ var http = require('http')
 
 function Geo(options) {
     var self = this;
-        
+
     function request(options, callback)
-    {    
+    {
 	http.get(options.host, function(res){
    	 var body = '';
 
@@ -15,7 +15,7 @@ function Geo(options) {
     	res.on('end', function(){
             var response = JSON.parse(body);
             console.log("Got a response: ", response);
- 	    callback(null, response);       
+ 	    callback(null, response);
         });
         }).on('error', function(e){
             console.error("Got an error: ", e);
@@ -31,7 +31,7 @@ function Geo(options) {
 	}
 	var o = {
             country : countryString,
-            img : "https://geoiptool.de/static/img/flags/" + response["country_code"].toLowerCase() + ".gif"
+            img : "https://geoiptool.com/static/img/flags/" + response["country_code"].toLowerCase() + ".gif"
         }
 
         return o;
