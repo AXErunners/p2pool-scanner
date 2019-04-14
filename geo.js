@@ -31,7 +31,7 @@ function Geo(options) {
 	}
 	var o = {
             country : countryString,
-            img : "https://geoiptool.com/static/img/flags/" + response["country_code"].toLowerCase() + ".gif"
+            img : "https://geoiptool.de/static/img/flags/" + response["country_code"].toLowerCase() + ".gif"
         }
 
         return o;
