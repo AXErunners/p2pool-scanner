@@ -5,17 +5,17 @@ function Geo(options) {
         
     function request(options, callback)
     {    
-        http.get(options.host, function(res){
-         var body = '';
+	http.get(options.host, function(res){
+   	 var body = '';
 
-        res.on('data', function(chunk){
+    	res.on('data', function(chunk){
             body += chunk;
-        });
+    	});
 
-        res.on('end', function(){
+    	res.on('end', function(){
             var response = JSON.parse(body);
             console.log("Got a response: ", response);
-            callback(null, response);       
+ 	    callback(null, response);       
         });
         }).on('error', function(e){
             console.error("Got an error: ", e);
@@ -24,12 +24,12 @@ function Geo(options) {
 
     function extract_geo(response) {
         var countryString;
-        if(response["city"] == "") {
-          countryString = response["country_name"];
-        } else {
-          countryString = response["country_name"] + " (" + response["city"] + ", " + response["region_code"] + ")";
-        }
-        var o = {
+	if(response["city"] == "") {
+	  countryString = response["country_name"];
+	} else {
+	  countryString = response["city"] + ", " + response["country_name"];
+	}
+	var o = {
             country : countryString,
             img : "https://geoiptool.com/static/img/flags/" + response["country_code"].toLowerCase() + ".gif"
         }
