@@ -7,3 +7,13 @@ A simple NodeJS scanner that runs beside p2pool node and scans all IPs stored in
 You need to setup separate instances of this process with different config files to run on Bitcoin and Litecoin networks.
 
 If HTTP port is provided in the configuration file, this application will publish the list on the given HTTP port.  Alternatively, it can be configured to upload page rendering to a destination FTP address to copy it to another host via SCP.
+
+#### Configuration
+
+Insert your API key here https://github.com/AXErunners/p2pool-scanner/blob/master/geo.js#L44
+```
+var options = {
+    host : 'http://api.ipstack.com/'+ip+'?access_key=3e7bc40a915b59945e8ff987aa7d4b1d&output=json&legacy=1',
+    port : 80,
+    method: 'GET'
+```
