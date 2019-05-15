@@ -242,6 +242,8 @@ function Scanner(options) {
                                "e0909bc-dirty",
                                "e0909bc",
                                "4cacc36",
+                               "850d3b2-dirty",
+                               "850d3b2",
                                "4cacc36-dirty",
                                "e1a9b6a",
                                "e1a9b6a-dirty",
