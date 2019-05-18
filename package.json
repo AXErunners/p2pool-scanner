@@ -17,5 +17,6 @@
     "type": "git",
     "url": "https://github.com/axerunners/p2pool-scanner.git"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "license": "MIT"
 }
