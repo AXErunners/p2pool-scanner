@@ -119,7 +119,7 @@ function Scanner(options) {
     if(config.flush_to_file_every_N_msec && config.flush_filename) {
         function flush_rendering() {
             var str = self.render();
-            fs.writeFile(config.flush_filename, str, { encoding : 'utf8'});
+            fs.writeFile(config.flush_filename, str, { encoding : 'utf8'}, (error) => { console.log("Error!"); });
             dpc(config.flush_to_file_every_N_msec, flush_rendering);
         }
 
