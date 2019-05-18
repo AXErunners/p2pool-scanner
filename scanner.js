@@ -99,7 +99,8 @@ function Scanner(options) {
 
             var version = info.stats.version;
             var uptime = (info.stats.uptime / 60 / 60 / 24).toFixed(1);
-            var fee = parseFloat((info.fee | 0)).toFixed(2);
+         // var fee = parseFloat((info.fee | 0)).toFixed(2);
+            var fee = info.fee;
 
             str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+7923+"/static/' target='_blank'>"+ip+":"+7923+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
             str += "<div class='p2p-geo'>";
