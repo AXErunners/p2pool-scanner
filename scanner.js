@@ -26,10 +26,8 @@ function Scanner(options) {
     {
         var express = require('express');
         var app = express();
-        app.configure(function(){
-            app.use(express.urlencoded())
-            app.use(express.json())
-        });
+            app.use(express.urlencoded());
+            app.use(express.json());
         app.get('/', function(req, res) {
             var str = self.render();
             res.write(str);
