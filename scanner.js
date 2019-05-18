@@ -29,6 +29,8 @@ function Scanner(options) {
         var bodyParser = require('body-parser');
         app.configure(function(){
             app.use(express.bodyParser());
+            app.use(connect.urlencoded())
+            app.use(connect.json())
         });
         app.get('/', function(req, res) {
             var str = self.render();
