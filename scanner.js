@@ -26,6 +26,7 @@ function Scanner(options) {
     {
         var express = require('express');
         var app = express();
+        var bodyParser = require('body-parser');
         app.configure(function(){
             app.use(express.bodyParser());
         });
