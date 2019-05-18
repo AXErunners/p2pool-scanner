@@ -41,7 +41,7 @@ function Geo(options) {
 
         // console.log("QUERYING IP:",ip);
         var options = {
-            host : 'http://api.ipstack.com/'+ip+'?access_key=_API_KEY_&output=json&legacy=1',
+            host : 'http://api.ipstack.com/'+ip+'?access_key=' + process.env.API_KEY + '&output=json&legacy=1',
             port : 80,
             method: 'GET'
         }
