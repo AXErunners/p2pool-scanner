@@ -8,7 +8,7 @@ If HTTP port is provided in the configuration file, this application will publis
 
 #### Configuration
 
-Insert your API key as in the example below https://github.com/AXErunners/p2pool-scanner/blob/master/geo.js#L44
+Insert your [API](https://ipstack.com) key as in the example below https://github.com/AXErunners/p2pool-scanner/blob/master/geo.js#L44
 ```
 var options = {
     host : 'http://api.ipstack.com/'+ip+'?access_key=3e7bc40a915b59945e8ff987aa7d4b1d&output=json&legacy=1',
