@@ -26,11 +26,9 @@ function Scanner(options) {
     {
         var express = require('express');
         var app = express();
-        var bodyParser = require('body-parser');
         app.configure(function(){
-            app.use(express.bodyParser());
-            app.use(connect.urlencoded())
-            app.use(connect.json())
+            app.use(express.urlencoded())
+            app.use(express.json())
         });
         app.get('/', function(req, res) {
             var str = self.render();
