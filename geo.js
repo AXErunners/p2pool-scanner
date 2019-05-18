@@ -1,5 +1,7 @@
 var http = require('http')
 
+require('dotenv').config()
+
 function Geo(options) {
     var self = this;
 
