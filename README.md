@@ -16,3 +16,6 @@ cd p2pool-scanner && npm install
 #### Configuration
 
 Insert your [API](https://ipstack.com) key in the `.env` file.
+```
+API_KEY=fdd2932cb2767a3ddddbbab95e94992e
+```
