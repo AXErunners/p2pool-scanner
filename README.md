@@ -6,12 +6,16 @@ A simple NodeJS scanner that runs beside p2pool node and scans all IPs stored in
 
 If HTTP port is provided in the configuration file, this application will publish the list on the given HTTP port.  Alternatively, it can be configured to upload page rendering to a destination FTP address to copy it to another host via SCP.
 
+#### Raw setup
+
+```
+git clone https://github.com/axerunners/p2pool-scanner
+cd p2pool-scanner && npm install
+```
+
 #### Configuration
 
-Insert your [API](https://ipstack.com) key as in the example below https://github.com/AXErunners/p2pool-scanner/blob/master/geo.js#L44
+Insert your `ipstack` [API](https://ipstack.com) key in the `.env` file.
 ```
-var options = {
-    host : 'http://api.ipstack.com/'+ip+'?access_key=3e7bc40a915b59945e8ff987aa7d4b1d&output=json&legacy=1',
-    port : 80,
-    method: 'GET'
+API_KEY=fdd2932cb2767a3ddddbbab95e94992e
 ```

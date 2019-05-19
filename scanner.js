@@ -26,9 +26,8 @@ function Scanner(options) {
     {
         var express = require('express');
         var app = express();
-        app.configure(function(){
-            app.use(express.bodyParser());
-        });
+            app.use(express.urlencoded({ extended: true }));
+            app.use(express.json());
         app.get('/', function(req, res) {
             var str = self.render();
             res.write(str);
@@ -100,7 +99,8 @@ function Scanner(options) {
 
             var version = info.stats.version;
             var uptime = (info.stats.uptime / 60 / 60 / 24).toFixed(1);
-            var fee = parseFloat((info.fee | 0)).toFixed(2);
+         // var fee = parseFloat((info.fee | 0)).toFixed(2);
+            var fee = info.fee;
 
             str += "<div class='p2p-row "+(row++ & 1 ? "row-grey" : "")+"'><div class='p2p-ip'><a href='http://"+ip+':'+7923+"/static/' target='_blank'>"+ip+":"+7923+"</a></div><div class='p2p-version'>"+version+"</div><div class='p2p-fee'>"+fee+"%</div><div class='p2p-uptime'>"+uptime+" days</div>";
             str += "<div class='p2p-geo'>";
@@ -120,7 +120,7 @@ function Scanner(options) {
     if(config.flush_to_file_every_N_msec && config.flush_filename) {
         function flush_rendering() {
             var str = self.render();
-            fs.writeFile(config.flush_filename, str, { encoding : 'utf8'});
+            fs.writeFile(config.flush_filename, str, { encoding : 'utf8'}, (error) => { console.log("Flush to file failed"); });
             dpc(config.flush_to_file_every_N_msec, flush_rendering);
         }
 

@@ -4,9 +4,10 @@
     "name": "AXE p2pool-scanner",
     "email": "info@axerunners.com"
   },
-  "version": "0.0.6",
+  "version": "1.0.0",
   "dependencies": {
-    "express": "3.*",
+    "dotenv": "^8.0.0",
+    "express": "*.*",
     "json": "*",
     "underscore": "*"
   },
@@ -17,5 +18,6 @@
     "type": "git",
     "url": "https://github.com/axerunners/p2pool-scanner.git"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "license": "MIT"
 }
