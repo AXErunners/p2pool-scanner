@@ -237,6 +237,8 @@ function Scanner(options) {
                                "8542674",
                                "c174c98",
                                "fcfb6ad",
+                               "8d29f46",
+                               "8d29f46-dirty",
                                "9fc7f3a",
                                "9fc7f3a-dirty",
                                "e0909bc-dirty",
